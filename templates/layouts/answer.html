@@ -1,0 +1,33 @@
+{% load static %}
+<div class="card mb-3 w-100">
+      <div class="row g-0">
+        <div class="col-3 p-2">
+            <div class=" w-100 mb-3" style="height:100px"  >
+          <img src="{% static 'img/img.jpg' %}" class="img-fluid rounded-start h-100 w-100" />
+            </div>
+            <div class="input-group flex-nowrap">
+              <input type="number" class="form-control" value="5">
+            </div>
+            <div class="input-group mt-2">
+                  <div class="input-group-text gap-2">
+                    <input class="form-check-input mt-0 " type="checkbox" checked="true" value="" aria-label="Checkbox for following text input">
+                      <label>Correct!</label>
+                  </div>
+                </div>
+          </div>
+
+        <div class="col-9">
+          <div class="card-body">
+            <p class="card-text">
+                {{item.text}}
+            </p>
+            <div class="row">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
+                This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
