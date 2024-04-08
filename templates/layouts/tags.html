@@ -12,13 +12,13 @@
         <div class="col-9">
           <div class="card-body">
             <h5 class="card-title">
-                <a href="/question/3">{{item.title}}</a>
+                <a href="{% url 'question' item.id %}">{{item.title}}</a>
             </h5>
             <p class="card-text">
                 {{item.text}}
             </p>
             <div class="row">
-                <a class="col-4" href="/question/3">answers (3)</a>
+                <a class="col-4" href="{% url 'question' item.id %}">answers (3)</a>
                     <div class="col-8">
                         <span>Tags</span>
                         <a href="/tag">tag</a>
