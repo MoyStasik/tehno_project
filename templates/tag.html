@@ -8,9 +8,9 @@
 
       <div class="col-8">
           {% for question in questions%}
-            {% include "layouts/tags.html" with item=question %}
+            {% include "layouts/question.html" with item=question %}
           {% endfor %}
-        {%include "layouts/pagin.html" with page_obj=questions paginator=pagin%}
+        {%include "layouts/pagin.html" with page_obj=questions%}
       </div>
 
 {% endblock %}

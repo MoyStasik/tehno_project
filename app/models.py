@@ -3,19 +3,38 @@ from django.db import models
 
 # Create your models here.
 
+def question_by_id(number):
+    return Question.objects.get(id = number)
+
+def answers_by_question_id(number):
+    return Answer.objects.filter(question = number)
+
+def new_questions():
+    question_list = Question.objects.order_by('-creating_date')
+    return question_list
+
+def hot_100_question():
+    question_list = Question.objects.order_by('-rate')[:100]
+    return question_list
+
+def question_by_tag(name):
+    one_tag = Tag.objects.get(tag_name = name)
+    question_list = Question.objects.filter(tag = one_tag.id)
+    return question_list
+
 class Profile(models.Model):
     nick_name = models.OneToOneField(User, related_name='cur_user', on_delete=models.PROTECT)
+    name = models.CharField(max_length=255, default="")
     avatar = models.ImageField(null=True, blank=True)
     rate = models.IntegerField()
     registration_date = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now = True)
-
-     # def __str__(self):
-     #     return self.nick_name
+    def __str__(self):
+         return self.name
 
 class Tag(models.Model):
-
-    tag_name = models.CharField(max_length=255, default="")
+    id = models.AutoField(auto_created=True,primary_key=True, unique=True)
+    tag_name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.tag_name
@@ -32,6 +51,8 @@ class Question(models.Model):
 
     def __str__(self):
         return self.header
+    # def set_rate(self):
+
 
 class Answer(models.Model):
     STATUS_CHOICES = [("l", "Legit"), ("nl", "Not legit")]

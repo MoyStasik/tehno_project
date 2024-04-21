@@ -18,7 +18,7 @@
                 {{item.text}}
             </p>
             <div class="row">
-                <a class="col-4" href="{% url 'question' item.id %}">answers (3)</a>
+                <a class="col-4" href="{% url 'question' item.id %}">answers {{item.id}}</a>
                     <div class="col-8">
                         <span>Tags</span>
                         <a href="/tag">tag</a>

@@ -6,26 +6,24 @@
           <img src="{% static 'img/img.jpg' %}" class="img-fluid rounded-start h-100 w-100" />
             </div>
             <div class="input-group flex-nowrap">
-              <input type="number" class="form-control" value="5">
+              <input type="number" class="form-control" value={{item.rate}}>
             </div>
           </div>
         <div class="col-9">
           <div class="card-body">
             <h5 class="card-title">
-                <a href="{% url 'question' item.id %}">{{item.title}}</a>
+                <a href="{% url 'question' item.id %}">{{item.header}}</a>
             </h5>
             <p class="card-text">
-                {{item.text}}
+                {{item.content}}
             </p>
             <div class="row">
                     <div class="col-8">
                         <span>Tags</span>
-                        <a href="/tag">tag</a>
-                        <a href="/tag">tag</a>
-                        <a href="/tag">tag</a>
-                        <a href="/tag">tag</a>
-                        <a href="/tag">tag</a>
-                        <a href="/tag">tag</a>
+
+                        {% for tag in item.tag.values %}
+                            <a href="/tag">{{tag.tag_name}}</a>
+                        {% endfor %}
                     </div>
 
           </div>
