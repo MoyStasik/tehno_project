@@ -22,7 +22,7 @@
                         <span>Tags</span>
 
                         {% for tag in item.tag.values %}
-                            <a href="/tag">{{tag.tag_name}}</a>
+                            <a href="/tag/{{tag.tag_name}}">{{tag.tag_name}}</a>
                         {% endfor %}
                     </div>
 

@@ -2,6 +2,20 @@ from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
+def answers_count(question_id):
+    return Answer.objects.filter(question=question_id).count()
+
+def tag_exist(name):
+    tag_list = Tag.objects.filter(tag_name = name)
+    if len(tag_list) == 0:
+        return False
+    return True
+
+def tag_by_tag_name(name):
+    return Tag.objects.get(tag_name=name)
+
+def profile_by_user(user):
+    return Profile.objects.get(nick_name=user)
 
 def question_by_id(number):
     return Question.objects.get(id = number)
@@ -64,8 +78,7 @@ class Answer(models.Model):
     creating_date = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.content
+
 
 
 

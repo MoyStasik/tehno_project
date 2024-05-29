@@ -1,33 +1,42 @@
-{% extends "layouts/register.html" %}
+{% extends "layouts/base.html" %}
+{% load django_bootstrap5 %}
+
 <div class="d-flex gap-3 align-items-center mt-3">
     <h1>New Question</h1>
 </div>
 {% block content %}
 
           <div class="col-8 ">
-              <div class="d-flex align-items-center" style="gap: 20px">
-                  Title
-                  <div class="form-floating w-100">
-                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea">How to build a moon park?</textarea>
-                    <label for="floatingTextarea">Title of your question</label>
-                    </div>
-              </div>
-              <div class = "mt-3 d-flex" style="gap: 20px">
-                  Text
-                  <div class="form-floating w-100">
-                  <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 340px">Really, how?
-Have no idea about it
-                  </textarea>
-                      <label for="floatingTextarea">input text</label>
-                </div>
-              </div>
-              <div class="mt-3 d-flex align-items-center"style="gap: 20px">
-                  Tags
-                  <div class="form-floating w-100">
-                  <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea3">moon, park, puzzle</textarea>
-                  <label for="floatingTextarea">key words</label>
-                </div>
-              </div>
-              <button class="btn btn-outline-success mt-4" style="margin-left: 55px; width: 100px" type="submit">Ask!</button>
+              <form action="" method="post">
+                  {% csrf_token %}
+                  {% bootstrap_form form %}
+<!--                  <div class="d-flex align-items-center" style="gap: 20px">-->
+
+<!--                      Title-->
+<!--                      {{form.textarea}}-->
+<!--&lt;!&ndash;                      <div class="form-floating w-100">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <label for="floatingTextarea">Title of your question</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--                  </div>-->
+<!--                  <div class = "mt-3 d-flex" style="gap: 20px">-->
+<!--                      Text-->
+<!--                      {{form.textarea}}-->
+<!--&lt;!&ndash;                      <div class="form-floating w-100">&ndash;&gt;-->
+<!--&lt;!&ndash;                      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 340px">&ndash;&gt;-->
+<!--&lt;!&ndash;                      </textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;                          <label for="floatingTextarea">input text</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                  </div>-->
+<!--                  <div class="mt-3 d-flex align-items-center"style="gap: 20px">-->
+<!--                      Tags-->
+<!--                      {% bootstrap_form form %}-->
+<!--&lt;!&ndash;                      <div class="form-floating w-100">&ndash;&gt;-->
+<!--&lt;!&ndash;                      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea3"></textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;                      <label for="floatingTextarea">key words</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                  </div>-->
+                  <button class="btn btn-outline-success mt-4" style="margin-left: 55px; width: 100px" type="submit">Ask!</button>
+              </form>
           </div>
 {% endblock %}

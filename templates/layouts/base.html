@@ -16,18 +16,20 @@
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
       <a class="btn btn-primary" href="/ask" role="button" style="width: 75px">Ask!</a>
-      <div class="d-flex justify-content-between gap-3">
-            <div class="border">
-                <img src="{% static 'img/img.jpg' %}" alt="..." width="50" height="50">
-            </div>
-            <div class="d-flex flex-column justify-content-between">
-                <div>Kriger S.</div>
-                <div>
-                    <a href="/settings">Settings</a>
-                    <a href="/logout">Log out</a>
+      {%  if request.user.is_authenticated %}
+          <div class="d-flex justify-content-between gap-3">
+                <div class="border">
+                    <img src="{% static 'img/img.jpg' %}" alt="..." width="50" height="50">
+                </div>
+                <div class="d-flex flex-column justify-content-between">
+                    <div>{{request.user.username}}</div>
+                    <div>
+                        <a href="/settings">Settings</a>
+                        <a href="/logout">Log out</a>
+                    </div>
                 </div>
             </div>
-        </div>
+      {% endif %}
   </div>
 </nav>
     <main class="container-sm-fluid container-lg mt-3">

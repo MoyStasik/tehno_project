@@ -1,10 +1,20 @@
+import random
+
+from django.contrib import auth
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.urls import reverse
+from django.views.decorators.http import require_http_methods
+
+from app.forms import LoginForm, RegisterForm, AskForm, AnswerForm
 from app.models import Question, question_by_id, answers_by_question_id, Tag, hot_100_question, new_questions, \
-    question_by_tag
+    question_by_tag, profile_by_user, tag_by_tag_name, tag_exist, Answer, answers_count
 
 QUESTIONS = [
     {
@@ -43,25 +53,111 @@ def hot(request):
         "page": page_obj,
     }
     return render(request, "hot.html", context)
+
+
+@login_required(login_url="/login/", redirect_field_name="continue")
 def question(request, question_id):
      item = question_by_id(question_id)
      page_count = 2
      answers = answers_by_question_id(question_id)
      page_obj = paginate(answers, request, page_count)
-     return render(request, "question.html", {"question": item, "answers": page_obj})
+     if request.method == 'GET':
+         answer_form = AnswerForm()
+     if request.method == 'POST':
+        answer_form = AnswerForm(data=request.POST)
+        if answer_form.is_valid():
+            answ = answer_form.cleaned_data
+            profile = profile_by_user(request.user)
+            answer = Answer.objects.create(
+             status=random.choice(Answer.STATUS_CHOICES),
+             user=profile,
+             question=question_by_id(question_id),
+             content=answ['content'],
+             rate=0
+            )
+            answer.save()
+            count = answers_count(question_id)
+            count = count // 2 + count % 2
+            return HttpResponseRedirect(reverse(("question"), kwargs={'question_id': question_id}) + '?page=' + str(count))
+     return render(request, "question.html", context={'question': item, 'answers': page_obj, 'form': answer_form})
 
+
+@require_http_methods(['GET', 'POST'])
 def login(request):
-    return render(request, "login.html")
+    print(request.GET)
+    print(request.POST)
+    next = ""
+
+    if request.GET:
+        next = request.GET['continue']
+        print(next)
+    if request.method == 'GET':
+        login_form = LoginForm()
+    if request.method == 'POST':
+        login_form = LoginForm(data=request.POST)
+        if login_form.is_valid():
+            user = authenticate(request, **login_form.cleaned_data)
+            if user:
+                auth_login(request, user)
+                if next != "":
+                    print(next)
+                    return HttpResponseRedirect(next)
+                else:
+                    return redirect(reverse('index'))
+
+        print('failed to login')
+    return render(request, "login.html", context={'form': login_form, 'next': next})
 
 def logout(request):
-    return redirect('/login')
+    auth.logout(request)
+    return redirect(reverse('index'))
 
 def signup(request):
-    return render(request, "registration.html")
+    if request.method == 'GET':
+        user_form = RegisterForm()
+    if request.method == 'POST':
+        user_form = RegisterForm(request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
+            if user:
+                auth_login(request, user)
+                return redirect(reverse('index'))
+            else:
+                user_form.add_error(field=None, error="User saving error!")
+    return render(request, "registration.html", {'form': user_form})
 
+@login_required(login_url="/login/", redirect_field_name="continue")
 def ask(request):
-    return render(request, "ask.html")
+    if request.method == 'GET':
+        question_form = AskForm()
+    if request.method == 'POST':
+        question_form = AskForm(data=request.POST)
+        if question_form.is_valid():
+            quest = question_form.cleaned_data
+            tags = quest['tag']
+            tags = tags.split(", ")
+            profile = profile_by_user(request.user)
+            question = Question.objects.create(
 
+                user= profile,
+                header = quest['header'],
+                content = quest['content'],
+                rate=0
+            )
+            for i in tags:
+                if tag_exist(i):
+                    tag = tag_by_tag_name(i)
+                else:
+                    tag = Tag.objects.create(
+                        tag_name= i
+                    )
+                    tag.save()
+                question.tag.add(tag)
+            question.save()
+            return redirect(reverse("question", kwargs= {'question_id': question.id}))
+    return render(request, "ask.html", context = {'form': question_form})
+
+@login_required(login_url="/login/", redirect_field_name="continue")
 def settings(request):
     return render(request, "settings.html")
 

@@ -1,52 +1,58 @@
 {% extends "layouts/register.html" %}
+{% load django_bootstrap5 %}
+
 {% block content%}
 <main class="container-sm-fluid container-lg mt-3">
     <div class="row">
       <div class="col-8">
         <h1>Registration</h1>
-        <p style="color: red;">Sorry, this email address already registred!</p>
-        <form>
-          <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-3 col-form-label">Login</label>
-            <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="dr_pepper" style="width: 400px">
-            </div>
-          </div>
-          <div class="row mb-3">
-            <label for="inputPassword3" class="col-sm-3 col-form-label" >Email</label>
-            <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputPassword3" placeholder="asd@mail.ru" style="width: 400px">
-            </div>
-          </div>
-            <div class="row mb-3">
-            <label for="NickName" class="col-sm-3 col-form-label">NickName</label>
-            <div class="col-sm-9">
-              <input type="email" class="form-control" id="NickName" placeholder="Dr. Pepper" style="width: 400px">
-            </div>
-          </div>
-            <div class="row mb-3">
-            <label for="inputPassword4" class="col-sm-3 col-form-label" >Password</label>
-            <div class="col-sm-9">
-              <input type="password" class="form-control" id="inputPassword4" placeholder="12345678" style="width: 400px">
-            </div>
-          </div>
-            <div class="row mb-3">
-            <label for="inputPassword5" class="col-sm-3 col-form-label" >Repeat password</label>
-            <div class="col-sm-9">
-              <input type="password" class="form-control" id="inputPassword5" placeholder="12345678" style="width: 400px">
-            </div>
-          </div>
-            <div class="row mb-3">
-                <label for="inputGroupFile04" class="col-sm-3 col-form-label">Upload avatar</label>
-                <div class="col-sm-9">
-                    <div class="input-group" style="width:400px">
-                      <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
-                      <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Choose</button>
-                    </div>
-                </div>
-            </div>
+<!--        <p style="color: red;">Sorry, this email address already registred!</p>-->
+        <form method="post" action="">
+           {% csrf_token %}
+
+            {% bootstrap_form form %}
+<!--          <div class="row mb-3">-->
+<!--            <label for="inputEmail3" class="col-sm-3 col-form-label">Login</label>-->
+<!--            <div class="col-sm-9">-->
+<!--              <input type="email" class="form-control" id="inputEmail3" placeholder="dr_pepper" style="width: 400px">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row mb-3">-->
+<!--            <label for="inputPassword3" class="col-sm-3 col-form-label" >Email</label>-->
+<!--            <div class="col-sm-9">-->
+<!--              <input type="email" class="form-control" id="inputPassword3" placeholder="asd@mail.ru" style="width: 400px">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--            <div class="row mb-3">-->
+<!--            <label for="NickName" class="col-sm-3 col-form-label">NickName</label>-->
+<!--            <div class="col-sm-9">-->
+<!--              <input type="email" class="form-control" id="NickName" placeholder="Dr. Pepper" style="width: 400px">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--            <div class="row mb-3">-->
+<!--            <label for="inputPassword4" class="col-sm-3 col-form-label" >Password</label>-->
+<!--            <div class="col-sm-9">-->
+<!--              <input type="password" class="form-control" id="inputPassword4" placeholder="12345678" style="width: 400px">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--            <div class="row mb-3">-->
+<!--            <label for="inputPassword5" class="col-sm-3 col-form-label" >Repeat password</label>-->
+<!--            <div class="col-sm-9">-->
+<!--              <input type="password" class="form-control" id="inputPassword5" placeholder="12345678" style="width: 400px">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--            <div class="row mb-3">-->
+<!--                <label for="inputGroupFile04" class="col-sm-3 col-form-label">Upload avatar</label>-->
+<!--                <div class="col-sm-9">-->
+<!--                    <div class="input-group" style="width:400px">-->
+<!--                      <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">-->
+<!--                      <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Choose</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+          <button class="btn btn-outline-success mt-4" type="submit" style="margin-left: 190px; width: 100px">Register</button>
         </form>
-         <button class="btn btn-outline-success mt-4" type="submit" style="margin-left: 190px; width: 100px">Register</button>
+
 
       </div>
 {% endblock %}
