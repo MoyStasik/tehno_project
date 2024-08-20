@@ -1,0 +1,17 @@
+{% extends "layouts/base.html"%}
+{% load static %}
+
+{% block content %}
+
+             <div class="d-flex gap-3 align-items-center mt-3">
+                <h1>Hot questions</h1>
+                <a href="/">New Questions</a>
+            </div>
+
+              <div class="col-8">
+                  {% for quest in page%}
+                    {% include "layouts/question.html" with item=quest %}
+                  {% endfor %}
+                {%include "layouts/pagin.html" with page_obj=page%}
+      </div>
+{% endblock %}
