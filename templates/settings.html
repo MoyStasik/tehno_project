@@ -1,40 +1,16 @@
 {% extends "layouts/base.html" %}
+{% load django_bootstrap5 %}
 {% load static %}
 
 {% block content%}
       <div class="col-8">
         <h1>Settings: Dr. Pepper</h1>
-        <form class="mt-4">
-          <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-3 col-form-label">Login</label>
-            <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputEmail3" placeholder="dr_pepper" style="width: 400px">
-            </div>
-          </div>
-          <div class="row mb-3">
-            <label for="inputPassword3" class="col-sm-3 col-form-label" >Email</label>
-            <div class="col-sm-9">
-              <input type="email" class="form-control" id="inputPassword3" placeholder="asd@mail.ru" style="width: 400px">
-            </div>
-          </div>
-            <div class="row mb-3">
-            <label for="NickName" class="col-sm-3 col-form-label">NickName</label>
-            <div class="col-sm-9">
-              <input type="email" class="form-control" id="NickName" placeholder="Dr. Pepper" style="width: 400px">
-            </div>
-            </div>
-            <div class="row mb-3">
-            <label for="inputGroupFile04" class="col-sm-3 col-form-label">Upload avatar</label>
-            <div class="col-sm-9" >
-               <img src="../static/img/img.jpg" class="img-fluid rounded-start" style="width: 100px; height: 100px" />
-                <div class="input-group mt-3" style="width:400px">
-                      <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
-                      <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Choose</button>
-                </div>
-            </div>
-            </div>
+        <form action="{% url 'settings' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button class="btn btn-outline-success mt-4" type="submit" style="margin-left: 190px; width: 100px">Save</button>
         </form>
-         <button class="btn btn-outline-success mt-4" type="submit" style="margin-left: 190px; width: 100px">Save</button>
+
 
       </div>
 {% endblock %}

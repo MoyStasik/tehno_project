@@ -5,16 +5,18 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.db.models import Count
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 
-from app.forms import LoginForm, RegisterForm, AskForm, AnswerForm
+from app.forms import LoginForm, RegisterForm, AskForm, AnswerForm, EditProfile
 from app.models import Question, question_by_id, answers_by_question_id, Tag, hot_100_question, new_questions, \
-    question_by_tag, profile_by_user, tag_by_tag_name, tag_exist, Answer, answers_count
+    question_by_tag, profile_by_user, tag_by_tag_name, tag_exist, Answer, answers_count, QuestionLike
 
 QUESTIONS = [
     {
@@ -37,12 +39,22 @@ def paginate(object_list, request, per_page = 10):
 
 
 def index(request):
+    #questions = Question.objects.annotate(likes_count=Count('question_likes')).all()
+    # questions = Question.objects.all()
+    # for q in questions:
+    #     q.rate = 0
+    #     q.rate = len(QuestionLike.objects.all().filter(question = q.id))
+    #     q.save()
+
+
     page_count = 5
     quest_pages = new_questions()
     page_obj = paginate(quest_pages, request, page_count)
     context ={
         "page": page_obj,
+
     }
+
     return render(request, "index.html", context)
 
 def hot(request):
@@ -158,8 +170,21 @@ def ask(request):
     return render(request, "ask.html", context = {'form': question_form})
 
 @login_required(login_url="/login/", redirect_field_name="continue")
+@csrf_protect
 def settings(request):
-    return render(request, "settings.html")
+    form = EditProfile
+    if request.method == 'POST':
+        form = EditProfile(request.POST, request.FILES)
+        if form.is_valid():
+            profile = profile_by_user(request.user)
+            prof_image = form.cleaned_data
+            profile.avatar = prof_image['image']
+            profile.name = prof_image['nickname']
+            profile.save()
+            return redirect(reverse('settings'))
+        else:
+            form = EditProfile
+    return render(request, "settings.html", {'form': form})
 
 def tag(request, tag_name):
     page_count = 3
@@ -170,3 +195,42 @@ def tag(request, tag_name):
         "tag_name": tag_name
     }
     return render(request, "tag.html", context)
+
+
+@require_http_methods(['POST'])
+@login_required(login_url="login")
+@csrf_protect
+def like(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    profile = profile_by_user(request.user)
+    question_like, question_like_created = QuestionLike.objects.get_or_create(question=question, user=profile)
+
+
+    if not question_like_created:
+        question_like.delete()
+        question.rate -= 1
+    else:
+        question.rate += 1
+    question.save()
+
+    return redirect(reverse('index'))
+
+
+@require_http_methods(['POST'])
+@login_required(login_url="login")
+@csrf_protect
+def like_async(request, question_id):
+    print("Я тут")
+    question = get_object_or_404(Question, pk=question_id)
+    profile = profile_by_user(request.user)
+    question_like, question_like_created = QuestionLike.objects.get_or_create(question=question, user=profile)
+
+
+    if not question_like_created:
+        question_like.delete()
+        question.rate -= 1
+    else:
+        question.rate += 1
+    question.save()
+
+    return JsonResponse({'likes_count': question.rate})

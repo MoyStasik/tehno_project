@@ -66,3 +66,11 @@ class AnswerForm(forms.Form):
         super().clean()
         if self.cleaned_data['content'] == "":
             raise ValidationError('content is empty!')
+
+class EditProfile(forms.Form):
+    nickname = forms.CharField()
+    image = forms.ImageField()
+
+    def clean(self):
+        if self.cleaned_data['nickname'] == "":
+            raise ValidationError('content is empty!')

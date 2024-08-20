@@ -1,13 +1,19 @@
 {% load static %}
-<div class="card mb-3 w-100">
+<div class="card mb-3 w-100" data-question-id="{{item.id}}">
       <div class="row g-0">
         <div class="col-3 p-2">
             <div class=" w-100 mb-3" style="height:100px"  >
           <img src="{% static 'img/img.jpg' %}" class="img-fluid rounded-start h-100 w-100" />
             </div>
             <div class="input-group flex-nowrap">
-              <input type="number" class="form-control" value={{item.rate}}>
+              <input  class="like-counter form-control" value={{item.rate}}>
             </div>
+<!--            <form action="{% url 'like' item.id%}" method="post">-->
+<!--                {% csrf_token %}-->
+<!--                  <button type="submit" class="like-button btn btn-outline-primary">Like</button>-->
+<!--            </form>-->
+            <button type="submit" class="like-button btn btn-outline-primary">Like</button>
+
           </div>
         <div class="col-9">
           <div class="card-body">

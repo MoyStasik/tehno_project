@@ -39,12 +39,11 @@ def question_by_tag(name):
 class Profile(models.Model):
     nick_name = models.OneToOneField(User, related_name='cur_user', on_delete=models.PROTECT)
     name = models.CharField(max_length=255, default="")
-    avatar = models.ImageField(null=True, blank=True)
+    avatar = models.ImageField(upload_to="img")
     rate = models.IntegerField()
     registration_date = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now = True)
-    def __str__(self):
-         return self.name
+
 
 class Tag(models.Model):
     id = models.AutoField(auto_created=True,primary_key=True, unique=True)
